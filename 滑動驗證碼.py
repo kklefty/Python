@@ -1,6 +1,13 @@
 #借鑑來源 簡書:https://www.jianshu.com/p/25a42d97185b
 
-#修正精準定位，
+#修正精準定位方式，增加功能註釋
+#------運作方式------
+#1.進入測試網站輸入會員資料，使用滑鼠懸停滑動控制板，觸發顯示並下載"驗證缺口圖片"與"小拼圖"。
+#2.將驗證缺口圖片進行灰度處理後，使用opencv進行小拼圖比對，回傳缺口起始座標 X 位置。
+#3.彈出視窗顯示，並標示偵測後缺口位置(此步驟為檢測使用，若正式運行，可移除此段)。
+#4.依照前端顯示框架大小與實際圖片寬度製作 "比值" 倍數，將移動 X 距離乘以比值得到前端需移動總距離。
+#5.使用漸進加速與左右來回橫移來模擬手動操作行為。
+#6.確認成功元素或提示，程式終止結束。
 
 from PIL import Image
 from selenium import webdriver
@@ -17,7 +24,7 @@ class CrackSlider():
 
     #使用滑動驗證網站
     def __init__(self):
-        self.url = "https://member.igoldhk.com" # 'https://xxx.test.com'
+        self.url = "https://xxx.test.com"
         self.driver = webdriver.Chrome()
         self.wait = WebDriverWait(self.driver, 20)
         self.zoom = 1
@@ -34,9 +41,9 @@ class CrackSlider():
         
     #獲得驗證圖片與小拼圖
     def get_pic(self):
-        # mouse = self.driver.find_element_by_class_name('slideCode_slider') #使用滑鼠懸停觸發驗證圖片顯示
-        # ActionChains(self.driver).move_to_element(mouse).perform()
-        self.driver.find_element_by_class_name('slideCode_slider').click()
+        mouse = self.driver.find_element_by_class_name('slideCode_slider') # 使用滑鼠懸停觸發驗證圖片顯示
+        ActionChains(self.driver).move_to_element(mouse).perform()
+        # self.driver.find_element_by_class_name('slideCode_slider').click() # 使用滑鼠點擊也能觸發圖片(會刷新圖片)
         time.sleep(1)
         target = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'slideCode_bg-img'))) # 獲得有缺口的圖片
         template = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'slideCode_jigsaw'))) # 獲得小拼圖
