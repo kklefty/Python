@@ -45,7 +45,7 @@ class CrackSlider():
         target_img.save('target.jpg')
         template_img.save('template.png')
         local_img = cv2.imread('target.jpg') # 使用opencv讀取缺口圖片
-        size_loc = local_img.shape # 獲得缺口圖片大小(寬、高、頻道(彩色))
+        size_loc = local_img.shape # 獲得缺口圖片大小(高、寬、頻道(彩色))
         print(size_loc)
         self.zoom = int(size_loc[0])/500 # 獲得缺口圖片寬度除以500數值當作結果值，作為縮放比例(拼圖移動會使用)
 
@@ -74,7 +74,7 @@ class CrackSlider():
         img_rgb = cv2.imread(target) # 載入有缺口的圖片
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY) # 進行灰度化處理
         template = cv2.imread(template, 0) # 載入要搜索的圖片(可以滑動那張小拼圖)
-        w, h = template.shape[::-1] # shape會顯示，寬、高與頻道(彩色3,灰諧1)，此處將最後一個數值del，因此紀錄小拼圖的圖像尺寸 W:寬 H:高
+        w, h = template.shape[::-1] # shape會顯示，高、寬與頻道(彩色3,灰諧1)，此處將最後一個數值del，因此紀錄小拼圖的圖像尺寸 W:寬 H:高
         print(w, h)
 
         # 開始進行匹配
